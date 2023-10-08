@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Expr\Cast\Array_;
 
 class PostController extends Controller
 {
@@ -11,18 +13,13 @@ class PostController extends Controller
      */
     public function index()
     {
+
+        $posts = Storage::get('posts.txt');
+        $posts = explode("\n", $posts);
+        // ddd($posts);
+
         $views_data = [
-            'posts' => [
-                // title = 0                 content = 1
-                [
-                    'title' => "Mengenal Laravel",
-                    'content' => "ini adalah blog pertama kita"
-                ],
-                [
-                    'title' => "Mengenal program",
-                    'content' => "ini adalah blog kedua kita"
-                ]
-            ]
+            'posts' => $posts
         ];
 
         // $views_data = [
@@ -54,7 +51,23 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        echo "ini posts data: $id";
+        $posts = Storage::get('posts.txt');
+
+        $posts = explode("\n", $posts);
+        $selected_post = Array();
+
+        foreach($posts as $post){
+            $post = explode(",", $post);
+            if($post[0] == $id){
+                $selected_post = $post;
+            }
+        }
+
+        $views_data = [
+            'post' => $selected_post
+        ];
+        // ddd($views_data);
+        return view('posts.show', $views_data);
     }
 
     /**
