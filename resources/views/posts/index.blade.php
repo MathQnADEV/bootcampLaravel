@@ -23,23 +23,28 @@
 <body>
 
     <div class="container">
-        <h1>HALOO BLOGGER</h1>
+        <h1>
+            HALOO BLOGGER
+            <a class="btn btn-success" href="{{ url('posts/create') }}">+ Buat Postingan</a>
+        </h1>
         @foreach ($posts as $post)
-        <div class="card mb-3">
-            <div class="card-body">
-                    @php($post = explode(",", $post))
-                    <h5 class="card-title">{{ $post[0] }}</h5>
-                    <p class="card-text">{{ $post[0] }}</p>
-                    <p class="card-text"><small class="text-body-secondary">Last updated at {{ date("d M Y H:i", strtotime($post[0]))}}</small></p>
-
-                    <a href="{{ url("posts/{$post[0]}") }}" class="btn btn-primary">Selengkapnya</a>
+            @php($post = explode(',', $post))
+            @if (count($post) >= 4)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $post[1] }}</h5>
+                        <p class="card-text">{{ $post[2] }}</p>
+                            <p class="card-text"><small class="text-body-secondary">Last updated at
+                                    {{ date('d M Y H:i', strtotime($post[3])) }}</small></p>
+                            <a href="{{ url("posts/{$post[0]}") }}" class="btn btn-primary">Selengkapnya</a>
+                    </div>
                 </div>
-            </div>
+            @endif
         @endforeach
     </div>
 
 
-    <script src="{{ asset('bootstrap/bootstrap.bundle.min.js')}}"
+    <script src="{{ asset('bootstrap/bootstrap.bundle.min.js') }}"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </body>

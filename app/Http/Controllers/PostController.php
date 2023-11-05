@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\Cast\Array_;
+// use PhpParser\Node\Expr\Cast\Array_;
 
 class PostController extends Controller
 {
@@ -26,7 +26,7 @@ class PostController extends Controller
         //     'posts' => "ini laravel",
         //     'content' => "ini content laravel"
         // ];
-
+        // ddd($views_data);
         return view('posts.index', $views_data);
     }
 
@@ -35,7 +35,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        echo "create post";
+        return view('posts.create');
     }
 
     /**
@@ -43,7 +43,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $title = $request->input('title');
+        $content = $request->input('content');
+
+        $posts = Storage::get('posts.txt');
+        $posts = explode("\n", $posts);
+
+        $new_post = [
+            count($posts) + 1, // jika posts.txt tidak enter pada saat save ( + 1 ). kalau tidak maka tidak usah + 1
+            $title,
+            $content,
+            date('Y-m-d H:i:s')
+        ];
+
+        $new_post = implode(',', $new_post);
+
+        array_push($posts, $new_post);
+
+        $posts = implode("\n", $posts);
+        Storage::write('posts.txt', $posts);
+
+        return redirect('posts');
     }
 
     /**
